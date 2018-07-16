@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FPSTest.iml" filepath="$PROJECT_DIR$/FPSTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/takt/takt.iml" filepath="$PROJECT_DIR$/takt/takt.iml" />
     </modules>
   </component>
 </project>

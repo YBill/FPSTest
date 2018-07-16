@@ -1,9 +1,7 @@
-package com.bill.fpstest;
+package com.bill.fpstest.fps;
 
-import android.util.Log;
 import android.view.Choreographer;
 
-import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -13,37 +11,40 @@ import java.util.concurrent.TimeUnit;
 public class FPSManager implements Choreographer.FrameCallback {
 
     private Choreographer choreographer;
+    private long frameStartTime = 0;
+    private int framesRenderCount = 0;
+    private FPSChangeListener fpsChangeListener;
 
-    public FPSManager() {
+    FPSManager() {
         choreographer = Choreographer.getInstance();
-        addListener();
     }
 
-    public void addListener() {
+    void addListener() {
         choreographer.postFrameCallback(this);
     }
 
-    public void removeListener() {
+    void removeListener() {
         choreographer.removeFrameCallback(this);
     }
 
-    private long frameStartTime = 0;
-    private int framesRendered = 0;
-    private final DecimalFormat decimal = new DecimalFormat("#.0' fps'");
+    void setFpsChangeListener(FPSChangeListener fpsChangeListener) {
+        this.fpsChangeListener = fpsChangeListener;
+    }
 
     @Override
     public void doFrame(long frameTimeNanos) {
-
         long frameTimeMillis = TimeUnit.NANOSECONDS.toMillis(frameTimeNanos);
         if (frameStartTime > 0) {
             final long timeDiff = frameTimeMillis - frameStartTime;
-            framesRendered++;
+            framesRenderCount++;
             if (timeDiff > 1000) {
-                final double fps = framesRendered * 1000 / (double) timeDiff;
-                Log.e("Bill", framesRendered + "|fps:" + decimal.format(fps));
+                final double fps = framesRenderCount * 1000 / (double) timeDiff;
+                if (fpsChangeListener != null) {
+                    fpsChangeListener.update(fps);
+                }
 
                 frameStartTime = frameTimeMillis;
-                framesRendered = 0;
+                framesRenderCount = 0;
             }
         } else {
             frameStartTime = frameTimeMillis;

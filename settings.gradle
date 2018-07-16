@@ -1,1 +1,1 @@
-include ':app', ':takt'
+include ':app'
